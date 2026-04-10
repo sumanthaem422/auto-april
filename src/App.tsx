@@ -7,10 +7,10 @@ import { CurrencyProvider } from './context/CurrencyContext';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { LiveLab } from './components/LiveLab';
+import { VoiceDemos } from './components/VoiceDemos';
 import { ROICalculator } from './components/ROICalculator';
 import { BentoGrid } from './components/BentoGrid';
 import { ProofPoints } from './components/ProofPoints';
-import { Pricing } from './components/Pricing';
 import { Footer } from './components/Footer';
 
 export default function App() {
@@ -21,10 +21,10 @@ export default function App() {
         <main>
           <Hero />
           <BentoGrid />
+          <VoiceDemos />
           <LiveLab />
           <ROICalculator />
           <ProofPoints />
-          <Pricing />
         </main>
         <Footer />
       </div>

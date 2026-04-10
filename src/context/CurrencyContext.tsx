@@ -4,14 +4,27 @@ type Currency = 'USD' | 'INR';
 
 interface CurrencyContextType {
   currency: Currency;
-  setCurrency: (currency: Currency) => void;
   formatCurrency: (amount: number) => string;
 }
 
 const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined);
 
+// Helper to detect currency synchronously
+const detectCurrency = (): Currency => {
+  try {
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (timeZone === 'Asia/Kolkata' || timeZone === 'Asia/Calcutta') {
+      return 'INR';
+    }
+    return 'USD';
+  } catch (error) {
+    return 'USD';
+  }
+};
+
 export function CurrencyProvider({ children }: { children: ReactNode }) {
-  const [currency, setCurrency] = useState<Currency>('USD');
+  // Initialize state synchronously using the helper
+  const [currency] = useState<Currency>(detectCurrency());
 
   const formatCurrency = (amount: number) => {
     if (currency === 'USD') {
@@ -30,7 +43,7 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <CurrencyContext.Provider value={{ currency, setCurrency, formatCurrency }}>
+    <CurrencyContext.Provider value={{ currency, formatCurrency }}>
       {children}
     </CurrencyContext.Provider>
   );

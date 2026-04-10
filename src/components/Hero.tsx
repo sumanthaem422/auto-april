@@ -22,7 +22,7 @@ export function Hero() {
           </h1>
           
           <p className="text-lg text-text-muted mb-10 max-w-xl leading-relaxed">
-            We eliminate manual operational bottlenecks for high-growth businesses in Hyderabad. 24/7 WhatsApp AI agents, automated lead qualification, and document processing.
+            We eliminate manual operational bottlenecks for high-growth businesses. 24/7 WhatsApp AI agents, automated lead qualification, and document processing.
           </p>
           
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-12">
