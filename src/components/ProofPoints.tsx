@@ -1,10 +1,12 @@
 import { useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { cn } from '../lib/utils';
 
 const industries = [
   {
     name: 'Real Estate',
+    slug: 'realestate',
     metric: 'Lead Qualification',
     increase: '+340%',
     savings: '25% – 45%',
@@ -12,6 +14,7 @@ const industries = [
   },
   {
     name: 'Healthcare & Clinics',
+    slug: 'healthcare',
     metric: 'Appointment Booking',
     increase: '+215%',
     savings: '30% – 50%',
@@ -19,6 +22,7 @@ const industries = [
   },
   {
     name: 'Fitness & Wellness',
+    slug: 'fitness',
     metric: 'Member Retention',
     increase: '+180%',
     savings: '20% – 40%',
@@ -26,6 +30,7 @@ const industries = [
   },
   {
     name: 'Financial Services & Banking',
+    slug: 'bfsi',
     metric: 'Client Onboarding',
     increase: '+280%',
     savings: '30% – 60%',
@@ -33,6 +38,7 @@ const industries = [
   },
   {
     name: 'Manufacturing',
+    slug: 'manufacturing',
     metric: 'Supply Chain Queries',
     increase: '+190%',
     savings: '20% – 50%',
@@ -40,6 +46,7 @@ const industries = [
   },
   {
     name: 'Retail & E-commerce',
+    slug: 'ecommerce',
     metric: 'Customer Support',
     increase: '+410%',
     savings: '30% – 45%',
@@ -47,6 +54,7 @@ const industries = [
   },
   {
     name: 'Transportation & Logistics',
+    slug: 'logistics',
     metric: 'Dispatch Automation',
     increase: '+220%',
     savings: '25% – 50%',
@@ -54,6 +62,7 @@ const industries = [
   },
   {
     name: 'Education',
+    slug: 'edtech',
     metric: 'Student Enrollment',
     increase: '+150%',
     savings: '20% – 35%',
@@ -61,6 +70,7 @@ const industries = [
   },
   {
     name: 'Energy',
+    slug: 'energy',
     metric: 'Outage Reporting',
     increase: '+310%',
     savings: '30% – 55%',
@@ -116,8 +126,9 @@ export function ProofPoints() {
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {industries.map((industry) => (
-            <div 
+            <Link 
               key={industry.name} 
+              to={`/${industry.slug}`}
               className="w-[85vw] md:w-[450px] flex-none snap-start bg-bg-secondary border border-border rounded-[3rem] overflow-hidden shadow-sm group hover:shadow-xl transition-all flex flex-col h-full"
             >
               <div className="h-64 overflow-hidden relative">
@@ -148,12 +159,12 @@ export function ProofPoints() {
                 
                 <div className="pt-8 border-t border-border flex items-center justify-between">
                   <span className="text-sm font-bold text-heading">Ready to scale?</span>
-                  <button className="text-brand font-black text-xs uppercase tracking-widest flex items-center gap-2 hover:gap-3 transition-all">
-                    Book Call <ChevronRight className="w-4 h-4" />
-                  </button>
+                  <div className="text-brand font-black text-xs uppercase tracking-widest flex items-center gap-2 hover:gap-3 transition-all">
+                    View Case Study <ChevronRight className="w-4 h-4" />
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

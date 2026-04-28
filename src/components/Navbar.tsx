@@ -42,7 +42,6 @@ export function Navbar() {
           <a href="/#livelab" className="text-[13px] font-bold text-heading hover:text-brand transition-colors uppercase tracking-[0.05em]">Live Lab</a>
           <a href="/#case-studies" className="text-[13px] font-bold text-heading hover:text-brand transition-colors uppercase tracking-[0.05em]">Case Studies</a>
           <a href="/#roi" className="text-[13px] font-bold text-heading hover:text-brand transition-colors uppercase tracking-[0.05em]">ROI</a>
-          <a href="/#pricing" className="text-[13px] font-bold text-heading hover:text-brand transition-colors uppercase tracking-[0.05em]">Pricing</a>
         </nav>
 
         <div className="hidden lg:flex items-center gap-4">
@@ -70,7 +69,6 @@ export function Navbar() {
           <a href="/#livelab" className="text-[15px] font-bold text-heading uppercase tracking-widest border-b border-border pb-4" onClick={() => setIsMobileMenuOpen(false)}>Live Lab</a>
           <a href="/#case-studies" className="text-[15px] font-bold text-heading uppercase tracking-widest border-b border-border pb-4" onClick={() => setIsMobileMenuOpen(false)}>Case Studies</a>
           <a href="/#roi" className="text-[15px] font-bold text-heading uppercase tracking-widest border-b border-border pb-4" onClick={() => setIsMobileMenuOpen(false)}>ROI</a>
-          <a href="/#pricing" className="text-[15px] font-bold text-heading uppercase tracking-widest border-b border-border pb-4" onClick={() => setIsMobileMenuOpen(false)}>Pricing</a>
           
           <div className="mt-auto flex flex-col gap-4">
             <button className="bg-green py-4 rounded-xl text-white font-bold flex items-center justify-center gap-2">

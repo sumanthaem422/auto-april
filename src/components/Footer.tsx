@@ -38,10 +38,9 @@ export function Footer() {
             <div className="flex items-center gap-4 mb-8">
               <a href="https://www.linkedin.com/in/autoflowmation-ai-6089673b3/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-brand transition-colors"><Linkedin className="w-5 h-5" /></a>
               <a href="https://www.instagram.com/autoflowmation.ai/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-brand transition-colors"><Instagram className="w-5 h-5" /></a>
+              <a href="https://www.youtube.com/@autoflowmationai" target="_blank" rel="noopener noreferrer" className="text-white hover:text-brand transition-colors"><Youtube className="w-5 h-5" /></a>
               <a href="https://x.com/autoflowmationai" target="_blank" rel="noopener noreferrer" className="text-white hover:text-brand transition-colors"><Twitter className="w-5 h-5" /></a>
             </div>
-
-            <p className="text-xs font-medium">Made with ❤️ in Hyderabad, India</p>
           </div>
 
           {/* Column 2 — SERVICES */}
@@ -78,14 +77,14 @@ export function Footer() {
               "space-y-3 pt-2 lg:pt-0 lg:block",
               openSection === 'industries' ? "block" : "hidden"
             )}>
-              <li><a href="/#services" className="hover:text-white transition-colors text-sm">Real Estate</a></li>
-              <li><a href="/#services" className="hover:text-white transition-colors text-sm">Healthcare & Clinics</a></li>
-              <li><a href="/#services" className="hover:text-white transition-colors text-sm">Fitness & Wellness</a></li>
-              <li><a href="/#services" className="hover:text-white transition-colors text-sm">Ecommerce</a></li>
-              <li><a href="/#services" className="hover:text-white transition-colors text-sm">EdTech & Coaching</a></li>
-              <li><a href="/#services" className="hover:text-white transition-colors text-sm">Hospitality</a></li>
-              <li><a href="/#services" className="hover:text-white transition-colors text-sm">BFSI</a></li>
-              <li><a href="/#services" className="hover:text-white transition-colors text-sm">All Industries →</a></li>
+              <li><Link to="/realestate" className="hover:text-white transition-colors text-sm">Real Estate</Link></li>
+              <li><Link to="/healthcare" className="hover:text-white transition-colors text-sm">Healthcare & Clinics</Link></li>
+              <li><Link to="/fitness" className="hover:text-white transition-colors text-sm">Fitness & Wellness</Link></li>
+              <li><Link to="/ecommerce" className="hover:text-white transition-colors text-sm">Ecommerce</Link></li>
+              <li><Link to="/edtech" className="hover:text-white transition-colors text-sm">EdTech & Coaching</Link></li>
+              <li><Link to="/hospitality" className="hover:text-white transition-colors text-sm">Hospitality</Link></li>
+              <li><Link to="/bfsi" className="hover:text-white transition-colors text-sm">BFSI</Link></li>
+              <li><Link to="/#services" className="hover:text-white transition-colors text-sm">All Industries →</Link></li>
             </ul>
           </div>
 
@@ -104,9 +103,7 @@ export function Footer() {
             )}>
               <li><a href="/" className="hover:text-white transition-colors text-sm">About Us</a></li>
               <li><a href="/#case-studies" className="hover:text-white transition-colors text-sm">Case Studies</a></li>
-              <li><a href="/#pricing" className="hover:text-white transition-colors text-sm">Pricing</a></li>
               <li><a href="/#how-it-works" className="hover:text-white transition-colors text-sm">Blog & Guides</a></li>
-              <li><a href="/#pricing" className="hover:text-white transition-colors text-sm">Contact Us</a></li>
             </ul>
           </div>
 

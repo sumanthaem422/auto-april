@@ -66,18 +66,6 @@ export function Testimonials() {
             </div>
           ))}
         </div>
-
-        {/* Google Badge */}
-        <div className="flex flex-col items-center justify-center">
-          <div className="bg-bg-secondary px-8 py-4 rounded-full flex items-center gap-4 border border-border">
-            <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_92x30dp.png" alt="Google" className="h-5 opacity-80" />
-            <div className="w-px h-6 bg-border" />
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-heading">4.9 ★</span>
-              <span className="text-text-muted text-sm font-medium">28 Reviews on Google</span>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
