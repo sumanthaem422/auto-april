@@ -79,29 +79,32 @@ export function ProofPoints() {
   };
 
   return (
-    <section className="py-24 bg-gray-50 border-y border-border overflow-hidden">
+    <section className="py-24 bg-white border-y border-border overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div className="max-w-2xl">
-            <h2 className="text-4xl md:text-5xl font-display font-bold mb-4 text-gray-900">Proven Across Industries</h2>
-            <p className="text-gray-600 text-lg">
-              See how businesses are leveraging Autoflowmation to scale without adding headcount.
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand/10 text-brand text-xs font-black uppercase tracking-[0.2em] mb-6">
+              Industries
+            </div>
+            <h2 className="text-5xl md:text-6xl font-display font-bold mb-6 text-heading leading-tight tracking-tight">Proven Across Industries</h2>
+            <p className="text-text-muted text-xl font-medium">
+              See how businesses in your sector are leveraging Autoflowmation to scale without adding headcount.
             </p>
           </div>
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-4 shrink-0">
             <button 
               onClick={() => scroll('left')}
-              className="w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-600 hover:text-brand hover:border-brand hover:bg-brand/5 transition-colors shadow-sm"
+              className="w-14 h-14 rounded-full bg-white border border-border flex items-center justify-center text-heading hover:bg-brand hover:text-white transition-all shadow-md group active:scale-95"
               aria-label="Scroll left"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" />
             </button>
             <button 
               onClick={() => scroll('right')}
-              className="w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-600 hover:text-brand hover:border-brand hover:bg-brand/5 transition-colors shadow-sm"
+              className="w-14 h-14 rounded-full bg-white border border-border flex items-center justify-center text-heading hover:bg-brand hover:text-white transition-all shadow-md group active:scale-95"
               aria-label="Scroll right"
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" />
             </button>
           </div>
         </div>
@@ -109,38 +112,45 @@ export function ProofPoints() {
         {/* Carousel Track */}
         <div 
           ref={scrollRef}
-          className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 -mx-6 px-6 md:mx-0 md:px-0 scrollbar-hide"
+          className="flex overflow-x-auto snap-x snap-mandatory gap-8 pb-12 -mx-6 px-6 md:mx-0 md:px-0 scrollbar-hide"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {industries.map((industry) => (
             <div 
               key={industry.name} 
-              className="w-[85vw] md:w-[400px] flex-none snap-start bg-white border border-gray-200 rounded-3xl overflow-hidden shadow-sm group hover:shadow-md transition-shadow flex flex-col"
+              className="w-[85vw] md:w-[450px] flex-none snap-start bg-bg-secondary border border-border rounded-[3rem] overflow-hidden shadow-sm group hover:shadow-xl transition-all flex flex-col h-full"
             >
-              <div className="h-48 md:h-56 overflow-hidden relative">
+              <div className="h-64 overflow-hidden relative">
                 <img 
                   src={industry.image} 
                   alt={industry.name}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                   referrerPolicy="no-referrer"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/20 to-transparent flex items-end p-6">
-                  <h3 className="text-2xl font-display font-bold text-white">{industry.name}</h3>
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-8">
+                  <h3 className="text-3xl font-display font-bold text-white tracking-tight">{industry.name}</h3>
                 </div>
               </div>
               
-              <div className="p-6 md:p-8 flex-1 flex flex-col justify-between gap-6">
-                <div className="grid grid-cols-2 gap-4">
+              <div className="p-10 flex-1 flex flex-col justify-between gap-8">
+                <div className="grid grid-cols-2 gap-8">
                   <div>
-                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">{industry.metric}</p>
-                    <p className="text-2xl font-mono font-bold text-brand">{industry.increase}</p>
+                    <p className="text-xs font-black text-heading opacity-50 uppercase tracking-[0.2em] mb-2">{industry.metric}</p>
+                    <p className="text-3xl font-display font-black text-brand tracking-tight">{industry.increase}</p>
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Cost Savings</p>
-                    <p className="text-xl font-mono font-bold text-gray-900">
+                    <p className="text-xs font-black text-heading opacity-50 uppercase tracking-[0.2em] mb-2">OpEx Savings</p>
+                    <p className="text-2xl font-display font-bold text-heading tracking-tight">
                       {industry.savings}
                     </p>
                   </div>
+                </div>
+                
+                <div className="pt-8 border-t border-border flex items-center justify-between">
+                  <span className="text-sm font-bold text-heading">Ready to scale?</span>
+                  <button className="text-brand font-black text-xs uppercase tracking-widest flex items-center gap-2 hover:gap-3 transition-all">
+                    Book Call <ChevronRight className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             </div>

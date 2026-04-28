@@ -9,7 +9,7 @@ const tiers = [
     priceUSD: 299,
     priceINR: 24999,
     features: [
-      '1 AI Agent (WhatsApp or Web)',
+      '1 AI Agent (Dedicated Channel)',
       'Up to 1,000 conversations/mo',
       'Basic FAQ Training',
       'Email Support',

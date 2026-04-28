@@ -12,45 +12,46 @@ export function ROICalculator() {
   // For simplicity, we just calculate based on current state.
   
   const manualCostPerMonth = leads * hoursPerLead * hourlyRate;
-  const aiCostPerMonth = currency === 'USD' ? 299 : 24999; // Example fixed AI cost
+  const aiCostPerMonth = currency === 'USD' ? 299 : 24999;
   const monthlySavings = manualCostPerMonth - aiCostPerMonth;
   const annualSavings = monthlySavings * 12;
+  const savingsPercent = Math.max(0, Math.min(95, Math.round((monthlySavings / manualCostPerMonth) * 100)));
 
   return (
-    <section id="roi" className="py-24 bg-card border-y border-border">
+    <section id="roi" className="py-24 bg-white border-y border-border">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-bg border border-border text-xs font-medium text-brand mb-6 uppercase tracking-widest">
-              <Calculator className="w-3 h-3" />
-              Revenue Leak Calculator
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand/10 text-brand text-xs font-black uppercase tracking-[0.2em] mb-8">
+              <Calculator className="w-4 h-4" />
+              ROI Calculator
             </div>
-            <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">
-              Stop bleeding money on manual follow-ups.
+            <h2 className="text-5xl md:text-6xl font-display font-bold mb-8 text-heading leading-tight">
+              AI Pays For Itself. <br />Calculate Your ROI.
             </h2>
-            <p className="text-text-muted text-lg mb-10">
-              Calculate exactly how much your current manual processes are costing you, and see the immediate ROI of implementing Autoflowmation.
+            <p className="text-text-muted text-xl mb-12 font-medium">
+              See how much you save by replacing manual bottlenecks with autonomous AI agents. Higher conversion, lower overhead.
             </p>
 
-            <div className="space-y-8">
-              <div>
-                <div className="flex justify-between mb-2">
-                  <label className="text-sm font-medium uppercase tracking-wider text-text-muted">Monthly Leads</label>
-                  <span className="font-mono">{leads}</span>
+            <div className="space-y-10">
+              <div className="bg-bg-secondary p-8 rounded-[2rem] border border-border">
+                <div className="flex justify-between mb-4">
+                  <label className="text-xs font-black uppercase tracking-[0.2em] text-heading">Monthly Leads</label>
+                  <span className="font-bold text-brand text-lg">{leads}</span>
                 </div>
                 <input 
                   type="range" 
                   min="50" max="5000" step="50"
                   value={leads}
                   onChange={(e) => setLeads(Number(e.target.value))}
-                  className="w-full accent-brand"
+                  className="w-full accent-brand h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                 />
               </div>
 
-              <div>
-                <div className="flex justify-between mb-2">
-                  <label className="text-sm font-medium uppercase tracking-wider text-text-muted">Staff Hourly Rate</label>
-                  <span className="font-mono">{formatCurrency(hourlyRate)}/hr</span>
+              <div className="bg-bg-secondary p-8 rounded-[2rem] border border-border">
+                <div className="flex justify-between mb-4">
+                  <label className="text-xs font-black uppercase tracking-[0.2em] text-heading">Staff Cost / Hour</label>
+                  <span className="font-bold text-brand text-lg">{formatCurrency(hourlyRate)}/hr</span>
                 </div>
                 <input 
                   type="range" 
@@ -59,56 +60,43 @@ export function ROICalculator() {
                   step={currency === 'USD' ? 5 : 50}
                   value={hourlyRate}
                   onChange={(e) => setHourlyRate(Number(e.target.value))}
-                  className="w-full accent-brand"
-                />
-              </div>
-
-              <div>
-                <div className="flex justify-between mb-2">
-                  <label className="text-sm font-medium uppercase tracking-wider text-text-muted">Hours Spent per Lead</label>
-                  <span className="font-mono">{hoursPerLead} hrs</span>
-                </div>
-                <input 
-                  type="range" 
-                  min="0.1" max="2" step="0.1"
-                  value={hoursPerLead}
-                  onChange={(e) => setHoursPerLead(Number(e.target.value))}
-                  className="w-full accent-brand"
+                  className="w-full accent-brand h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                 />
               </div>
             </div>
           </div>
 
-          <div className="bg-bg border border-border rounded-3xl p-8 relative overflow-hidden">
-            <h3 className="text-xl font-display font-medium mb-8">Your Potential Impact</h3>
+          <div className="bg-heading rounded-[3rem] p-12 relative overflow-hidden shadow-2xl">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-brand/20 blur-[80px] rounded-full" />
             
-            <div className="space-y-6 mb-8">
-              <div className="flex justify-between items-center pb-6 border-b border-border/50">
-                <div className="flex items-center gap-3 text-text-muted">
-                  <Clock className="w-5 h-5" />
-                  <span>Manual Cost / Month</span>
+            <h3 className="text-2xl font-display font-bold mb-10 text-white relative z-10 tracking-tight">Your Projected Impact</h3>
+            
+            <div className="space-y-8 mb-12 relative z-10">
+              <div className="flex justify-between items-center pb-6 border-b border-white/10">
+                <div className="flex items-center gap-4 text-gray-400">
+                  <Bot className="w-6 h-6 text-brand" />
+                  <span className="font-bold text-sm tracking-widest uppercase">Operational Cost Savings</span>
                 </div>
-                <span className="font-mono text-xl">{formatCurrency(manualCostPerMonth)}</span>
-              </div>
-              <div className="flex justify-between items-center pb-6 border-b border-border/50">
-                <div className="flex items-center gap-3 text-text-muted">
-                  <Bot className="w-5 h-5" />
-                  <span>AI Cost / Month</span>
-                </div>
-                <span className="font-mono text-xl">{formatCurrency(aiCostPerMonth)}</span>
+                <span className="font-display font-bold text-3xl text-brand">{savingsPercent}%</span>
               </div>
             </div>
 
-            <div className="bg-card border border-border rounded-2xl p-6">
-              <div className="flex items-center gap-2 text-text-main mb-2 uppercase tracking-widest text-sm font-medium">
-                <TrendingUp className="w-4 h-4" />
-                Annual Savings
+            <div className="bg-white/5 border border-white/10 rounded-[2rem] p-10 backdrop-blur-md relative z-10">
+              <div className="flex items-center gap-3 text-brand mb-4 uppercase tracking-[0.2em] text-xs font-black">
+                <TrendingUp className="w-5 h-5" />
+                Annual Savings Estimate
               </div>
-              <div className="text-5xl font-display font-bold text-text-main mb-2">
+              <div className="text-6xl font-display font-bold text-white mb-4 tracking-tighter">
                 {formatCurrency(Math.max(0, annualSavings))}
               </div>
-              <p className="text-sm text-text-muted">Plus increased conversion rates from instant 24/7 responses.</p>
+              <p className="text-gray-400 font-medium italic">
+                *Includes reduction in lead leakage and 24/7 coverage.
+              </p>
             </div>
+            
+            <button className="w-full mt-10 py-5 bg-brand text-white rounded-2xl font-bold hover:bg-brand/90 transition-all shadow-xl shadow-brand/20 text-lg">
+              Claim Your Savings →
+            </button>
           </div>
         </div>
       </div>
