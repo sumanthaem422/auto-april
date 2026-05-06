@@ -273,6 +273,53 @@ export function LiveLab() {
                   <div ref={messagesEndRef} />
                 </div>
 
+                {/* Lead Gate Overlay */}
+                <AnimatePresence>
+                  {isGated && (
+                    <motion.div 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="absolute inset-0 z-20 flex items-center justify-center p-6 bg-white/20 backdrop-blur-[2px]"
+                    >
+                      <motion.div 
+                        initial={{ scale: 0.9, y: 20 }}
+                        animate={{ scale: 1, y: 0 }}
+                        className="bg-white border border-slate-200 rounded-[2rem] p-8 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] max-w-sm w-full text-center"
+                      >
+                        <div className="w-16 h-16 rounded-2xl bg-brand/10 text-brand flex items-center justify-center mx-auto mb-6">
+                            <Lock className="w-8 h-8" />
+                        </div>
+                        <h3 className="text-2xl font-display font-bold text-slate-900 mb-3">Keep Exploring?</h3>
+                        <p className="text-slate-500 text-sm mb-6 font-medium leading-relaxed">
+                          You've seen the power of our AI. Enter your email to unlock the full autonomous sandbox and book your custom audit.
+                        </p>
+                        <form onSubmit={handleGateSubmit} className="space-y-4">
+                          <div className="relative">
+                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                            <input 
+                              type="email" 
+                              name="email"
+                              required
+                              placeholder="work@enterprise.com"
+                              className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3.5 text-sm focus:outline-none focus:border-brand focus:ring-4 focus:ring-brand/10 transition-all font-bold"
+                            />
+                          </div>
+                          <button 
+                            type="submit"
+                            className="w-full py-4 bg-brand text-white rounded-xl font-bold text-sm hover:bg-brand/90 transition-all shadow-lg shadow-brand/20 flex items-center justify-center gap-2"
+                          >
+                            Unlock & Book Demo <ArrowRight className="w-4 h-4" />
+                          </button>
+                        </form>
+                        <p className="mt-6 text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+                          🛡️ Secure & No-Spam Guarantee
+                        </p>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 {/* Input Area */}
                 <div className="p-4 bg-white border-t border-slate-100 z-10">
                   <form onSubmit={onSubmit} className="flex gap-2">
