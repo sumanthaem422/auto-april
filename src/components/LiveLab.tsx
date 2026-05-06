@@ -5,8 +5,10 @@ import { GoogleGenAI } from '@google/genai';
 import { cn } from '../lib/utils';
 import { trackLead, trackInteraction } from '../lib/analytics';
 
-// Initialize Gemini
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const ai = GEMINI_API_KEY ? new GoogleGenAI({ apiKey: GEMINI_API_KEY }) : null;
+
+const isGeminiEnabled = Boolean(GEMINI_API_KEY);
 
 type Message = {
   id: string;
@@ -142,7 +144,9 @@ export function LiveLab() {
       setMessages(prev => [...prev, { 
         id: Date.now().toString(), 
         role: 'model', 
-        content: "Sorry, I'm having trouble connecting right now. Please ensure the GEMINI_API_KEY is set." 
+        content: ai
+          ? "Sorry, I'm having trouble connecting right now. Please check your Gemini API configuration."
+          : "Gemini API key is not configured. Live demo is unavailable in this local build."
       }]);
     } finally {
       setIsLoading(false);
