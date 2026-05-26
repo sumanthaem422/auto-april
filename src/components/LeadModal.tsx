@@ -4,6 +4,7 @@ import { X, CheckCircle2, Loader2, Send } from 'lucide-react';
 import { collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db, auth } from '../lib/firebase';
 import { useLead } from '../context/LeadContext';
+import { generateUUID } from '../lib/utils';
 
 enum OperationType {
   CREATE = 'create',
@@ -90,7 +91,7 @@ export function LeadModal() {
 
     const path = 'leads';
     const phoneDigits = formData.phone.replace(/\D/g, '');
-    const leadId = crypto.randomUUID();
+    const leadId = generateUUID();
 
     try {
       await setDoc(doc(db, path, leadId), {

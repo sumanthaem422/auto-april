@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Send, Mic, Phone, PhoneOff, Bot, User, Loader2, Calendar, Mail, CheckCircle2, Lock, ChevronDown, ArrowRight } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
-import { cn } from '../lib/utils';
+import { cn, generateUUID } from '../lib/utils';
 import { trackLead, trackInteraction } from '../lib/analytics';
 
 import { collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
@@ -221,7 +221,7 @@ export function LiveLab() {
     setIsLoading(true);
     try {
       const path = 'leads';
-      const leadId = crypto.randomUUID();
+      const leadId = generateUUID();
       await setDoc(doc(db, path, leadId), {
         email,
         phone: `+1${phoneDigits}`, // Assuming +1 as default for gate simplicity
