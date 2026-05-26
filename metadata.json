@@ -1,5 +1,6 @@
 {
   "name": "Autoflowmation.ai",
   "description": "Enterprise-grade AI Automation Agency website featuring interactive AI demos, ROI calculators, and bento-grid service showcases.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

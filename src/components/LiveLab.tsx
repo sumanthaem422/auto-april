@@ -1,16 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Send, Mic, Phone, PhoneOff, Bot, User, Loader2, Calendar, Mail, CheckCircle2, Lock, ChevronDown, ArrowRight } from 'lucide-react';
-import { GoogleGenAI } from '@google/genai';
 import { cn, generateUUID } from '../lib/utils';
 import { trackLead, trackInteraction } from '../lib/analytics';
 
 import { collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db, auth } from '../lib/firebase';
 import { useLead } from '../context/LeadContext';
-
-// Initialize Gemini
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 enum OperationType {
   CREATE = 'create',
@@ -155,18 +151,25 @@ export function LiveLab() {
         parts: [{ text: m.content }]
       }));
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
-        contents: [
-          ...history,
-          { role: 'user', parts: [{ text }] }
-        ],
-        config: {
-          systemInstruction: SYSTEM_PROMPT
-        }
+      const response = await fetch('/api/gemini/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          history,
+          text,
+          systemPrompt: SYSTEM_PROMPT
+        })
       });
 
-      const aiResponse = response.text || "I'm sorry, I couldn't process that request.";
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || 'Server error generating content');
+      }
+
+      const data = await response.json();
+      const aiResponse = data.text || "I'm sorry, I couldn't process that request.";
       
       setMessages(prev => [...prev, { 
         id: Date.now().toString(), 
