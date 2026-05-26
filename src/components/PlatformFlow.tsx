@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Bot, MessageSquare, Phone, Globe, Target, Calendar, BarChart3, Database, TrendingUp, CheckCircle2, Clock, Instagram, Send, LayoutGrid } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { useLead } from '../context/LeadContext';
 
 interface FeedItem {
   id: number;
@@ -34,6 +35,7 @@ const CHANNELS = [
 ];
 
 export function PlatformFlow() {
+  const { openModal } = useLead();
   const [items, setItems] = useState<FeedItem[]>([]);
   const [stats, setStats] = useState({ leads: 247, booked: 34, calls: 89 });
   const [activeChip, setActiveChip] = useState<string | null>(null);
@@ -234,7 +236,10 @@ export function PlatformFlow() {
               <span>UPTIME <span className="text-green-500">99.9%</span></span>
               <span>MISSED LEADS <span className="text-green-500">0</span></span>
             </div>
-            <button className="bg-brand text-white text-[10px] font-black px-5 py-2 rounded-full hover:bg-brand/90 transition-all tracking-widest shadow-lg shadow-brand/20">
+            <button 
+              onClick={() => openModal('Dashboard Footer')}
+              className="bg-brand text-white text-[10px] font-black px-5 py-2 rounded-full hover:bg-brand/90 transition-all tracking-widest shadow-lg shadow-brand/20"
+            >
               BOOK FREE AUDIT →
             </button>
           </div>

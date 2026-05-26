@@ -3,10 +3,12 @@ import { motion } from 'motion/react';
 import { Menu, X, Bot } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '../lib/utils';
+import { useLead } from '../context/LeadContext';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { openModal } = useLead();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,7 +47,10 @@ export function Navbar() {
         </nav>
 
         <div className="hidden lg:flex items-center gap-4">
-          <button className="bg-brand text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-brand/90 transition-all shadow-sm flex items-center gap-2">
+          <button 
+            onClick={() => openModal('Navbar Button')}
+            className="bg-brand text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-brand/90 transition-all shadow-sm flex items-center gap-2"
+          >
             Book Free Audit <span className="text-lg">→</span>
           </button>
         </div>
@@ -71,10 +76,10 @@ export function Navbar() {
           <a href="/#roi" className="text-[15px] font-bold text-heading uppercase tracking-widest border-b border-border pb-4" onClick={() => setIsMobileMenuOpen(false)}>ROI</a>
           
           <div className="mt-auto flex flex-col gap-4">
-            <button className="bg-green py-4 rounded-xl text-white font-bold flex items-center justify-center gap-2">
-              Get Started
-            </button>
-            <button className="bg-brand py-4 rounded-xl text-white font-bold flex items-center justify-center gap-2">
+            <button 
+              onClick={() => { openModal('Mobile Menu CTA'); setIsMobileMenuOpen(false); }}
+              className="bg-brand py-4 rounded-xl text-white font-bold flex items-center justify-center gap-2"
+            >
               Book Free Audit <span className="text-xl">→</span>
             </button>
           </div>

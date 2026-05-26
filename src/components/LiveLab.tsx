@@ -5,10 +5,49 @@ import { GoogleGenAI } from '@google/genai';
 import { cn } from '../lib/utils';
 import { trackLead, trackInteraction } from '../lib/analytics';
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const ai = GEMINI_API_KEY ? new GoogleGenAI({ apiKey: GEMINI_API_KEY }) : null;
+import { collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { db, auth } from '../lib/firebase';
+import { useLead } from '../context/LeadContext';
 
-const isGeminiEnabled = Boolean(GEMINI_API_KEY);
+// Initialize Gemini
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+enum OperationType {
+  CREATE = 'create',
+  UPDATE = 'update',
+  DELETE = 'delete',
+  LIST = 'list',
+  GET = 'get',
+  WRITE = 'write',
+}
+
+interface FirestoreErrorInfo {
+  error: string;
+  operationType: OperationType;
+  path: string | null;
+  authInfo: {
+    userId?: string | null;
+    email?: string | null;
+    emailVerified?: boolean | null;
+    isAnonymous?: boolean | null;
+  }
+}
+
+function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
+  const errInfo: FirestoreErrorInfo = {
+    error: error instanceof Error ? error.message : String(error),
+    authInfo: {
+      userId: auth.currentUser?.uid,
+      email: auth.currentUser?.email,
+      emailVerified: auth.currentUser?.emailVerified,
+      isAnonymous: auth.currentUser?.isAnonymous,
+    },
+    operationType,
+    path
+  };
+  console.error('Firestore Error: ', JSON.stringify(errInfo));
+  throw new Error(JSON.stringify(errInfo));
+}
 
 type Message = {
   id: string;
@@ -40,6 +79,7 @@ Follow this playbook:
 Keep responses short (1-3 sentences), conversational, and highly persuasive. Do not break character.`;
 
 export function LiveLab() {
+  const { openModal } = useLead();
   const [activeTab, setActiveTab] = useState<'chat' | 'voice'>('chat');
   
   // Chat State
@@ -96,7 +136,7 @@ export function LiveLab() {
       return;
     }
 
-    // Teaser Gate Logic: Lock after 3 messages if no email provided
+    // Teaser Gate Logic: Lock after 2 prompts if no email provided
     if (userMessageCount >= 2 && !leadCaptured) {
       setIsGated(true);
       return;
@@ -118,10 +158,12 @@ export function LiveLab() {
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: [
-          { role: 'user', parts: [{ text: SYSTEM_PROMPT }] },
           ...history,
           { role: 'user', parts: [{ text }] }
-        ]
+        ],
+        config: {
+          systemInstruction: SYSTEM_PROMPT
+        }
       });
 
       const aiResponse = response.text || "I'm sorry, I couldn't process that request.";
@@ -144,9 +186,7 @@ export function LiveLab() {
       setMessages(prev => [...prev, { 
         id: Date.now().toString(), 
         role: 'model', 
-        content: ai
-          ? "Sorry, I'm having trouble connecting right now. Please check your Gemini API configuration."
-          : "Gemini API key is not configured. Live demo is unavailable in this local build."
+        content: "Sorry, I'm having trouble connecting right now. Please ensure the GEMINI_API_KEY is set." 
       }]);
     } finally {
       setIsLoading(false);
@@ -158,11 +198,38 @@ export function LiveLab() {
     handleSendMessage(input);
   };
 
-  const handleGateSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleGateSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get('email') as string;
-    if (email) {
+    const formDataEntries = new FormData(e.currentTarget);
+    const email = (formDataEntries.get('email') as string).trim();
+    const phone = (formDataEntries.get('phone') as string).trim();
+    
+    // Regex Patterns
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const phoneDigits = phone.replace(/\D/g, '');
+    
+    if (!emailRegex.test(email)) {
+      alert('Please enter a valid work email');
+      return;
+    }
+
+    if (phoneDigits.length !== 10) {
+      alert('Please enter a valid 10-digit phone number');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const path = 'leads';
+      const leadId = crypto.randomUUID();
+      await setDoc(doc(db, path, leadId), {
+        email,
+        phone: `+1${phoneDigits}`, // Assuming +1 as default for gate simplicity
+        fullName: 'Live Lab User',
+        source: 'Live Lab Gate',
+        createdAt: serverTimestamp()
+      });
+
       setCapturedEmail(email);
       setLeadCaptured(true);
       setIsGated(false);
@@ -170,6 +237,10 @@ export function LiveLab() {
       setMessages(prev => [...prev, 
         { id: Date.now().toString(), role: 'model', content: `Thanks! I've unlocked the sandbox and sent a calendar invite to ${email}. What else would you like to know?` }
       ]);
+    } catch (error) {
+      handleFirestoreError(error, OperationType.WRITE, 'leads');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -300,14 +371,35 @@ export function LiveLab() {
                         </p>
                         <form onSubmit={handleGateSubmit} className="space-y-4">
                           <div className="relative">
-                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                            <input 
-                              type="email" 
-                              name="email"
-                              required
-                              placeholder="work@enterprise.com"
-                              className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3.5 text-sm focus:outline-none focus:border-brand focus:ring-4 focus:ring-brand/10 transition-all font-bold"
-                            />
+                            <label className="block text-[10px] text-left font-black text-slate-400 uppercase tracking-widest mb-1 ml-1 leading-none">
+                              Work Email <span className="text-red-500">*</span>
+                            </label>
+                            <div className="relative">
+                              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                              <input 
+                                type="email" 
+                                name="email"
+                                required
+                                placeholder="work@enterprise.com"
+                                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3.5 text-sm focus:outline-none focus:border-brand focus:ring-4 focus:ring-brand/10 transition-all font-bold"
+                              />
+                            </div>
+                          </div>
+                          <div className="relative">
+                            <label className="block text-[10px] text-left font-black text-slate-400 uppercase tracking-widest mb-1 ml-1 leading-none">
+                              Phone <span className="text-red-500">*</span>
+                            </label>
+                            <div className="relative">
+                              <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                              <input 
+                                type="tel" 
+                                name="phone"
+                                required
+                                maxLength={10}
+                                placeholder="10-digit Phone"
+                                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3.5 text-sm focus:outline-none focus:border-brand focus:ring-4 focus:ring-brand/10 transition-all font-bold"
+                              />
+                            </div>
                           </div>
                           <button 
                             type="submit"
@@ -470,7 +562,7 @@ export function LiveLab() {
 
               {/* Final CTA within Sidebar */}
               <button 
-                onClick={() => trackInteraction('live_lab', 'book_audit')}
+                onClick={() => { trackInteraction('live_lab', 'book_audit'); openModal('Live Lab Sidebar'); }}
                 className="mt-6 w-full py-4 bg-brand text-white rounded-2xl font-bold text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-brand/20 flex items-center justify-center gap-2"
               >
                 Book Full Demo <ArrowRight className="w-4 h-4" />

@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function isValidLead(data) {
+      return data.fullName is string && data.fullName.size() >= 2 && data.fullName.size() <= 100
+          && data.email is string && data.email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')
+          && data.phone is string && data.phone.matches('^\\+[0-9]{1,4}[0-9]{10}$')
+          && (data.get('industry', null) == null || (data.industry is string && data.industry.size() <= 100))
+          && (data.get('company', null) == null || (data.company is string && data.company.size() <= 100))
+          && (data.get('website', null) == null || (data.website is string && data.website.size() <= 200))
+          && data.createdAt == request.time;
+    }
+
+    match /leads/{leadId} {
+      allow create: if isValidId(leadId) && isValidLead(incoming());
+      // No standard user can read/list/update leads for security
+      allow read, list, update, delete: if false;
+    }
+  }
+}

@@ -2,8 +2,10 @@ import { motion } from 'motion/react';
 import { ArrowRight, Bot } from 'lucide-react';
 import { trackInteraction } from '../lib/analytics';
 import { PlatformFlow } from './PlatformFlow';
+import { useLead } from '../context/LeadContext';
 
 export function Hero() {
+  const { openModal } = useLead();
   return (
     <section className="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden">
       <div className="max-w-[1440px] mx-auto px-6 grid lg:grid-cols-[1fr_1.2fr] gap-16 items-center relative z-10 w-full">
@@ -31,17 +33,17 @@ export function Hero() {
           
           <div className="flex flex-col sm:flex-row items-center gap-4 mb-16">
             <button 
-              onClick={() => trackInteraction('roi', 'deploy_agent_hero')}
+              onClick={() => { trackInteraction('roi', 'deploy_agent_hero'); openModal('Hero Main CTA'); }}
               className="bg-brand text-white px-10 py-4.5 rounded-full font-bold flex items-center gap-2 hover:bg-brand/90 transition-all shadow-lg shadow-brand/20 w-full sm:w-auto justify-center text-lg"
             >
-              Deploy Your Agent <ArrowRight className="w-5 h-5" />
+              Request Free Audit <ArrowRight className="w-5 h-5" />
             </button>
-            <button 
-              onClick={() => trackInteraction('roi', 'view_cases_hero')}
+            <a 
+              href="#case-studies"
               className="px-10 py-4.5 rounded-full font-bold border-2 border-border hover:bg-bg-secondary transition-all w-full sm:w-auto text-center text-lg text-heading"
             >
               View Case Studies
-            </button>
+            </a>
           </div>
         </motion.div>
 

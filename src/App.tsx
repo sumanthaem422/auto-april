@@ -5,7 +5,9 @@
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { CurrencyProvider } from './context/CurrencyContext';
+import { LeadProvider } from './context/LeadContext';
 import { Navbar } from './components/Navbar';
+import { LeadModal } from './components/LeadModal';
 import { ScrollToTop } from './components/ScrollToTop';
 import { Hero } from './components/Hero';
 import { LiveLab } from './components/LiveLab';
@@ -26,10 +28,12 @@ export default function App() {
   return (
     <Router>
       <ScrollToTop />
-      <CurrencyProvider>
-        <div className="min-h-screen bg-white text-text-main selection:bg-brand/30">
-          <Navbar />
-          <main>
+      <LeadProvider>
+        <CurrencyProvider>
+          <div className="min-h-screen bg-white text-text-main selection:bg-brand/30">
+            <Navbar />
+            <LeadModal />
+            <main>
             <Routes>
               <Route path="/" element={
                 <>
@@ -65,6 +69,7 @@ export default function App() {
           <Footer />
         </div>
       </CurrencyProvider>
-    </Router>
+    </LeadProvider>
+  </Router>
   );
 }

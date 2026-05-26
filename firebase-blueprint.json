@@ -1,0 +1,52 @@
+{
+  "entities": {
+    "Lead": {
+      "title": "Lead",
+      "description": "Captured lead information from audit requests and interactions.",
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string",
+          "description": "User's full name"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "User's email address"
+        },
+        "phone": {
+          "type": "string",
+          "description": "User's phone number with country code"
+        },
+        "industry": {
+          "type": "string",
+          "description": "Industry sector of the company"
+        },
+        "company": {
+          "type": "string",
+          "description": "Company name"
+        },
+        "website": {
+          "type": "string",
+          "description": "Company website URL"
+        },
+        "source": {
+          "type": "string",
+          "description": "Where the lead came from (e.g., 'Hero Button', 'Live Lab Gate')"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the lead was created"
+        }
+      },
+      "required": ["fullName", "email", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/leads/{leadId}": {
+      "schema": "Lead",
+      "description": "Collection of leads."
+    }
+  }
+}

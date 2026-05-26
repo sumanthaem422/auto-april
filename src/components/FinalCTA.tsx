@@ -1,7 +1,9 @@
 import { Bot, ArrowRight } from 'lucide-react';
 import { trackInteraction } from '../lib/analytics';
+import { useLead } from '../context/LeadContext';
 
 export function FinalCTA() {
+  const { openModal } = useLead();
   return (
     <section className="py-24 px-6">
       <div className="max-w-7xl mx-auto">
@@ -24,7 +26,7 @@ export function FinalCTA() {
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
               <button 
-                onClick={() => trackInteraction('roi', 'book_audit_footer')}
+                onClick={() => { trackInteraction('roi', 'book_audit_footer'); openModal('Final CTA'); }}
                 className="bg-brand text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-brand/90 transition-all shadow-xl shadow-brand/20 flex items-center gap-2 w-full sm:w-auto"
               >
                 Book Free Audit <ArrowRight className="w-5 h-5" />
