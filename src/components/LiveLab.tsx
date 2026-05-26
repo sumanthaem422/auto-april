@@ -85,6 +85,7 @@ export function LiveLab() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   // Lead Gen State
   const [userMessageCount, setUserMessageCount] = useState(0);
@@ -99,11 +100,20 @@ export function LiveLab() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    } else {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
   };
 
   useEffect(() => {
-    scrollToBottom();
+    if (messages.length > 1) {
+      scrollToBottom();
+    }
   }, [messages]);
 
   // Simulated Backend: Detect email in text
@@ -310,10 +320,13 @@ export function LiveLab() {
             {activeTab === 'chat' && (
               <div className="flex-1 flex flex-col relative overflow-hidden">
                 {/* Messages Area */}
-                <div className={cn(
-                  "flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide transition-all duration-500",
-                  isGated ? "blur-md scale-[0.98] opacity-50 pointer-events-none" : ""
-                )}>
+                <div 
+                  ref={messagesContainerRef}
+                  className={cn(
+                    "flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide transition-all duration-500",
+                    isGated ? "blur-md scale-[0.98] opacity-50 pointer-events-none" : ""
+                  )}
+                >
                   {messages.map((msg) => (
                     <motion.div 
                       initial={{ opacity: 0, y: 10 }}
