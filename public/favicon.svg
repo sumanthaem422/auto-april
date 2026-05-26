@@ -1,0 +1,22 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Rounded brand blue container mimicking the navbar brand emblem -->
+  <rect width="100" height="100" rx="22" fill="#2563EB"/>
+  
+  <!-- Sleek white robot outline & details -->
+  <path d="M26 44C26 34.0589 34.0589 26 44 26H56C65.9411 26 74 34.0589 74 44V58C74 65.732 67.732 72 60 72H40C32.268 72 26 65.732 26 58V44Z" fill="white"/>
+  
+  <!-- Robot Eyes (colored in deep background or brand blue) -->
+  <rect x="36" y="38" width="8" height="8" rx="4" fill="#2563EB"/>
+  <rect x="56" y="38" width="8" height="8" rx="4" fill="#2563EB"/>
+  
+  <!-- Cute stylized smile -->
+  <path d="M42 54C42 54 45 57.5 50 57.5C55 57.5 58 54 58 54" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Left and Right Ears / Bolts -->
+  <rect x="18" y="44" width="8" height="12" rx="4" fill="white"/>
+  <rect x="74" y="44" width="8" height="12" rx="4" fill="white"/>
+  
+  <!-- Single sleek top antenna -->
+  <rect x="47" y="14" width="6" height="12" rx="3" fill="white"/>
+  <circle cx="50" cy="11" r="5" fill="white"/>
+</svg>
