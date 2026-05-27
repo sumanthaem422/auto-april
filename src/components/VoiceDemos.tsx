@@ -1,29 +1,30 @@
 import React, { useState, useRef } from 'react';
-import { Play, Pause, Phone, Volume2, ArrowRight } from 'lucide-react';
+import { Play, Pause, Phone, Volume2, ArrowRight, Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
 import { cn } from '../lib/utils';
 import { trackInteraction } from '../lib/analytics';
+import { useLead } from '../context/LeadContext';
 
-const categories = ['Ecommerce', 'EdTech', 'HealthTech', 'BFSI', 'Hospitality', 'Real Estate', 'Logistics'];
+const categories = ['Hospitals', 'Real Estate', 'Logistics'];
 
 const agentsData = {
-  Ecommerce: [
+  Hospitals: [
     {
-      id: 'e1',
-      title: 'Customer Support Agent',
-      tags: ['Inbound Support', 'English'],
-      desc: 'Listen to the AI handle a customer asking about a delayed refund, showing empathy and resolving the issue instantly.',
-      handles: ['Refund status inquiries', 'Order tracking & updates', 'Return policy guidance'],
+      id: 'h1',
+      title: 'Appointment Scheduling Agent',
+      tags: ['Inbound Booking', 'English'],
+      desc: 'Listen to the AI walk a patient through choosing a specialist, verifying insurance eligibility, and booking an open consultation slot live.',
+      handles: ['Dynamic schedule integration', 'Insurance eligibility checks', 'Pre-visit instructions delivery'],
       phone: '+91 8035 317 400',
       duration: '0:45',
       audioSrc: ''
     },
     {
-      id: 'e2',
-      title: 'Cart Abandonment Agent',
-      tags: ['Outbound Sales', 'English + Hindi'],
-      desc: 'Hear how the AI proactively calls a customer to offer a discount on items left in their cart, successfully closing the sale.',
-      handles: ['Personalized discount offers', 'Address verification', 'Payment issue resolution'],
+      id: 'h2',
+      title: 'Post-Discharge Follow-up Agent',
+      tags: ['Patient Satisfaction', 'English + Hindi'],
+      desc: 'Hear how the AI conducts post-discharge checks, evaluating patient recovery, tracking prescription adherence, and triggering emergency alerts.',
+      handles: ['Medication adherence tracking', 'Patient recovery logging', 'Instant priority clinical alerts'],
       phone: '+91 8035 317 449',
       duration: '1:12',
       audioSrc: ''
@@ -52,11 +53,7 @@ const agentsData = {
       duration: '0:55',
       audioSrc: ''
     }
-  ],
-  EdTech: [],
-  HealthTech: [],
-  BFSI: [],
-  Hospitality: []
+  ]
 };
 
 // Simulated Waveform Component for better Audio UX
@@ -84,7 +81,8 @@ const Waveform = ({ isPlaying }: { isPlaying: boolean }) => {
 };
 
 export function VoiceDemos() {
-  const [activeTab, setActiveTab] = useState('Ecommerce');
+  const { openModal } = useLead();
+  const [activeTab, setActiveTab] = useState('Hospitals');
   const [playingId, setPlayingId] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -104,7 +102,7 @@ export function VoiceDemos() {
   const currentAgents = agentsData[activeTab as keyof typeof agentsData] || [];
 
   return (
-    <section className="py-24 bg-white border-y border-border overflow-hidden">
+    <section id="voice-demos" className="py-24 bg-white border-y border-border overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand/10 text-brand text-xs font-black uppercase tracking-[0.2em] mb-6">
@@ -113,7 +111,7 @@ export function VoiceDemos() {
           </div>
           <h2 className="text-5xl font-display font-bold mb-6 text-heading leading-tight">Experience Our Voice Agents</h2>
           <p className="text-text-muted max-w-2xl mx-auto text-xl font-medium mb-10">
-            Don't just take our word for it. Listen to real recordings of our AI handling complex conversations, or call the numbers to try them yourself.
+            Don't just take our word for it. Listen to real interactive recordings of our enterprise voice AI, or dial directly to experience them live.
           </p>
 
           <div className="bg-bg-secondary inline-flex items-center gap-3 px-6 py-3 rounded-2xl border border-border">
@@ -121,7 +119,7 @@ export function VoiceDemos() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
             </span>
-            <span className="text-sm font-bold text-heading">🎧 Real recordings. Real conversations. Call the numbers to try it live.</span>
+            <span className="text-sm font-bold text-heading">🎧 Tap any number below on your mobile device to test live voice call workflows instantly.</span>
           </div>
         </div>
 
@@ -211,9 +209,9 @@ export function VoiceDemos() {
                 </div>
                 <a 
                   href={`tel:${agent.phone.replace(/\s/g, '')}`}
-                  className="flex items-center gap-3 px-8 py-4 bg-green-bg text-green hover:bg-green-bg/80 rounded-2xl font-bold transition-all w-full sm:w-auto justify-center border-2 border-green/20 shadow-sm"
+                  className="flex items-center gap-3 px-8 py-4 bg-green-bg text-green hover:bg-green-bg/80 rounded-2xl font-bold transition-all w-full sm:w-auto justify-center border-2 border-green/20 shadow-sm hover:scale-[1.02] active:scale-[0.98]"
                 >
-                  <Phone className="w-5 h-5" />
+                  <Phone className="w-5 h-5 animate-pulse" />
                   {agent.phone}
                 </a>
               </div>
@@ -225,8 +223,14 @@ export function VoiceDemos() {
               <div className="w-20 h-20 bg-white shadow-sm border border-border rounded-full flex items-center justify-center mx-auto mb-6">
                 <Volume2 className="w-10 h-10 text-brand opacity-50" />
               </div>
-              <p className="font-bold text-heading text-2xl mb-3">Training in Progress</p>
-              <p className="text-lg font-medium">We are currently fine-tuning our voice agents for the {activeTab} sector.</p>
+              <p className="font-bold text-heading text-2xl mb-3">Custom Agent Preparation</p>
+              <p className="text-lg font-medium">We can model voice workflows for any customized business scenario in mere hours.</p>
+              <button 
+                onClick={() => openModal('Voice Sector Inquiry')}
+                className="mt-6 bg-brand text-white px-8 py-3.5 rounded-full font-bold shadow-lg hover:scale-105 transition-all"
+              >
+                Request My Sector Demo
+              </button>
             </div>
           )}
         </div>
@@ -234,17 +238,25 @@ export function VoiceDemos() {
         {/* CTA Banner */}
         <div className="bg-brand rounded-[3rem] p-12 text-center relative overflow-hidden shadow-2xl shadow-brand/20">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
-          <h3 className="text-3xl md:text-4xl font-display font-bold text-white mb-6 relative z-10">Want a voice agent trained on YOUR business?</h3>
-          <p className="text-white/80 text-lg mb-10 relative z-10 font-medium">Impressed? We'll build a custom voice agent for your business in 7 days.</p>
+          <h3 className="text-3xl md:text-4xl font-display font-bold text-white mb-6 relative z-10">Want a custom voice agent trained on your business data?</h3>
+          <p className="text-white/80 text-lg mb-10 relative z-10 font-medium">We will draft a dynamic pilot call agent to qualify leads, book calendar slots, or deliver support in under 3 days.</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 relative z-10">
-            <button className="bg-white text-brand px-10 py-5 rounded-full font-bold text-lg hover:bg-white/90 transition-all shadow-xl flex items-center gap-2">
-              Build My Voice Agent <ArrowRight className="w-5 h-5" />
+            <button 
+              onClick={() => openModal('Voice Agent Custom Build Pipeline')}
+              className="bg-white text-brand px-10 py-5 rounded-full font-bold text-lg hover:bg-white/90 hover:scale-105 transition-all shadow-xl flex items-center gap-2"
+            >
+              Build My Client Agent <ArrowRight className="w-5 h-5" />
             </button>
-            <button className="bg-brand-hover text-white px-10 py-5 rounded-full font-bold text-lg border border-white/20 transition-all flex items-center gap-2">
-              Talk to Expert
+            <button 
+              onClick={() => openModal('Voice Integration Consultant Session')}
+              className="bg-brand hover:bg-brand/90 text-white px-10 py-5 rounded-full font-bold text-lg border border-white/20 transition-all flex items-center gap-2"
+            >
+              Consult with AI Architect
             </button>
           </div>
-          <p className="mt-8 text-white/60 text-sm font-bold uppercase tracking-[0.2em]">🔥 47 businesses have tried these agents this month</p>
+          <p className="mt-8 text-white/70 text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2">
+            <Sparkles className="w-4 h-4 text-amber-300" /> Over 40+ leading teams launched custom agents with us this month
+          </p>
         </div>
         
         {/* Hidden audio element for future use */}
