@@ -279,12 +279,14 @@ export function LiveLab() {
         setLeadCaptured(true);
       }
 
-    } catch (error) {
+    } catch (error: any) {
       console.error("Gemini API Error:", error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      
       setMessages(prev => [...prev, { 
         id: Date.now().toString(), 
         role: 'model', 
-        content: "Sorry, I'm having trouble connecting right now. Please ensure the GEMINI_API_KEY is set." 
+        content: `Error details: ${errorMessage}\n\nTroubleshooting hint: If the problem is "GEMINI_API_KEY environment variable is required", please check your Settings > Secrets panel in the AI Studio UI.`
       }]);
     } finally {
       setIsLoading(false);
