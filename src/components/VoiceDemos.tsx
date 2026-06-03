@@ -17,7 +17,7 @@ const agentsData = {
       handles: ['Dynamic schedule integration', 'Insurance eligibility checks', 'Pre-visit instructions delivery'],
       phone: '+91 8035 317 400',
       duration: '0:45',
-      audioSrc: ''
+      audioSrc: '/audio/appointment-scheduling.mp3'
     },
     {
       id: 'h2',
@@ -27,7 +27,7 @@ const agentsData = {
       handles: ['Medication adherence tracking', 'Patient recovery logging', 'Instant priority clinical alerts'],
       phone: '+91 8035 317 449',
       duration: '1:12',
-      audioSrc: ''
+      audioSrc: '/audio/post-discharge.mp3'
     }
   ],
   'Real Estate': [
@@ -85,18 +85,46 @@ export function VoiceDemos() {
   const [activeTab, setActiveTab] = useState('Hospitals');
   const [playingId, setPlayingId] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const timeoutRef = useRef<any>(null);
 
   const togglePlay = (id: string, src: string) => {
+    // Clear any existing simulation timer
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+
     if (playingId === id) {
       setPlayingId(null);
-      audioRef.current?.pause();
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
     } else {
       setPlayingId(id);
       trackInteraction('voice', `play_demo_${id}`);
-      setTimeout(() => {
-        setPlayingId((current) => current === id ? null : current);
-      }, 5000);
+      
+      if (src && audioRef.current) {
+        try {
+          audioRef.current.src = src;
+          audioRef.current.play().catch((err) => {
+            console.warn("Audio element playback rejected:", err);
+            // Fallback to visual simulated play state if file not found
+            triggerSimulatedPlayback(id);
+          });
+        } catch (e) {
+          triggerSimulatedPlayback(id);
+        }
+      } else {
+        triggerSimulatedPlayback(id);
+      }
     }
+  };
+
+  const triggerSimulatedPlayback = (id: string) => {
+    const durationSec = id === 'h1' ? 45 : id === 'h2' ? 72 : 65;
+    timeoutRef.current = setTimeout(() => {
+      setPlayingId((current) => current === id ? null : current);
+    }, durationSec * 1000);
   };
 
   const currentAgents = agentsData[activeTab as keyof typeof agentsData] || [];
