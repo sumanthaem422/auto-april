@@ -11,24 +11,35 @@ const PORT = 3000;
 
 app.use(express.json());
 
-// Initialize Gemini on server-side with metadata header
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-  httpOptions: {
-    headers: {
-      'User-Agent': 'aistudio-build',
-    }
+// Lazy initialization helper for GoogleGenAI
+let aiClient: GoogleGenAI | null = null;
+
+function getGeminiClient(): GoogleGenAI {
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) {
+    throw new Error("GEMINI_API_KEY environment variable is required but is missing. Please set it in the Settings.");
   }
-});
+  
+  if (!aiClient) {
+    aiClient = new GoogleGenAI({
+      apiKey: key,
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build',
+        }
+      }
+    });
+  }
+  return aiClient;
+}
 
 // Server-side API endpoint for Gemini chat proxy
 app.post("/api/gemini/generate", async (req, res) => {
   try {
     const { history, text, systemPrompt } = req.body;
     
-    if (!process.env.GEMINI_API_KEY) {
-      return res.status(500).json({ error: "GEMINI_API_KEY environment variable is required and is not set on the server." });
-    }
+    // Get initialized client dynamically
+    const ai = getGeminiClient();
 
     const response = await ai.models.generateContent({
       model: "gemini-3.5-flash",
