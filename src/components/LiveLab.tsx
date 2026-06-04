@@ -258,12 +258,19 @@ export function LiveLab() {
         })
       });
 
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.error || 'Server error generating content');
+      let data;
+      const responseText = await response.text();
+      
+      try {
+        data = JSON.parse(responseText);
+      } catch (jsonErr) {
+        throw new Error(`Server returned non-JSON response (Status ${response.status}): ${responseText.trim().slice(0, 160)}...`);
       }
 
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || `Server error (Status ${response.status}): ${responseText.trim().slice(0, 100)}`);
+      }
+
       const aiResponse = data.text || "I'm sorry, I couldn't process that request.";
       
       setMessages(prev => [...prev, { 
